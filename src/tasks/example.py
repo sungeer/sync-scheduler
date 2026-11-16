@@ -1,6 +1,4 @@
-import logging
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 
 # 示例任务 每 3 分钟跑一次
