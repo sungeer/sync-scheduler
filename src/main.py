@@ -44,4 +44,6 @@ def run():
 
         httpx.close()
 
+        logger.complete()
+
         os._exit(0)
