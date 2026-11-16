@@ -10,7 +10,7 @@ def setup_logger():
 
     root_logger.setLevel(logging.INFO)
 
-    logging.getLogger('apscheduler').setLevel(logging.WARNING)
+    # logging.getLogger('apscheduler').setLevel(logging.WARNING)
 
     fmt = '%(asctime)s | %(levelname)s | %(message)s (%(name)s:%(lineno)d)'
 
