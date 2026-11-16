@@ -1,4 +1,6 @@
-from loguru import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def handle_uncaught_exception(exc_type, exc_value, exc_traceback):

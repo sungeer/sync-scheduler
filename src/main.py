@@ -1,3 +1,4 @@
+import logging
 import os
 import signal
 import sys
@@ -8,6 +9,8 @@ from src.core.handler import handle_uncaught_exception
 from src.core.http_client import httpx
 from src.core.scheduler import build_scheduler
 from src.jobs import register_jobs
+
+logger = logging.getLogger(__name__)
 
 
 def on_sigterm(signum, frame):  # noqa
@@ -28,8 +31,6 @@ def run():
 
     register_jobs(scheduler)
 
-    from loguru import logger
-
     logger.info('registered %d jobs', len(scheduler.get_jobs()))
 
     scheduler.start()
@@ -43,7 +44,5 @@ def run():
         logger.info('scheduler shutdown')
 
         httpx.close()
-
-        logger.complete()
 
         os._exit(0)

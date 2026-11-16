@@ -1,42 +1,34 @@
+import logging
 import sys
-
-from loguru import logger
+from logging.handlers import TimedRotatingFileHandler
 
 from src import settings
 
 
 def setup_logger():
-    logger.remove()
+    root_logger = logging.getLogger()
 
-    fmt = (
-        '{time:HH:mm:ss.SSS} | {level} | '
-        '{message} ({name}:{line})'
-    )
+    root_logger.setLevel(logging.INFO)
 
-    env = settings.ENVIRONMENT
+    logging.getLogger('apscheduler').setLevel(logging.WARNING)
 
-    if env == 'development':
-        logger.add(
-            sys.stdout,
-            format=fmt,
-            diagnose=False,
-            backtrace=False,
-            colorize=False,
-            enqueue=False,
-            level='DEBUG',
-        )
+    fmt = '%(asctime)s | %(levelname)s | %(message)s (%(name)s:%(lineno)d)'
 
-    log_file = settings.LOG_DIR / 'scheduler_{time:YYYY-MM-DD}.log'
+    formatter = logging.Formatter(fmt=fmt)
 
-    logger.add(
+    if settings.ENVIRONMENT == 'development':
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(formatter)
+        root_logger.addHandler(console_handler)
+
+    log_file = settings.LOG_DIR / 'scheduler.log'
+
+    file_handler = TimedRotatingFileHandler(
         log_file,
-        format=fmt,
-        diagnose=False,
-        backtrace=False,
-        colorize=False,
-        enqueue=True,
-        level='INFO',
-        encoding='utf-8',
-        rotation='00:00',
-        retention='14 days',
+        when='midnight',
+        backupCount=14,
+        encoding='utf-8'
     )
+
+    file_handler.setFormatter(formatter)
+    root_logger.addHandler(file_handler)

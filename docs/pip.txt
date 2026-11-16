@@ -10,5 +10,4 @@ python -m pip install APScheduler python-dotenv
 
 python -m pip install httpx2
 
-python -m pip install loguru
 
